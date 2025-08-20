@@ -1,23 +1,24 @@
 # [CVPR 2025] EchoTraffic: Enhancing Traffic Anomaly Understanding with Audio-Visual Insights
 
-[[Paper]([https://cvpr2025.thecvf.com/](https://openaccess.thecvf.com/content/CVPR2025/papers/Xing_EchoTraffic_Enhancing_Traffic_Anomaly_Understanding_with_Audio-Visual_Insights_CVPR_2025_paper.pdf)) [[Dataset]](https://huggingface.co/datasets/harryhsing/AV-TAU)
+[[📄 Paper]](https://openaccess.thecvf.com/content/CVPR2025/papers/Xing_EchoTraffic_Enhancing_Traffic_Anomaly_Understanding_with_Audio-Visual_Insights_CVPR_2025_paper.pdf) ｜ [[🤗 Dataset (AV-TAU)]](https://huggingface.co/datasets/harryhsing/AV-TAU)
 
 ---
 
-## Dataset: AV-TAU
+## 📊 Dataset: AV-TAU
 We release the **AV-TAU dataset** to support audio-visual traffic anomaly understanding.  
 
-📂 Available on [Hugging Face](https://huggingface.co/datasets/harryhsing/AV-TAU)  
+👉 Available on [Hugging Face](https://huggingface.co/datasets/harryhsing/AV-TAU)
 
 ---
 
-## Code & Pretrained Models
+## 💻 Code & Pretrained Models
 🚧 The **EchoTraffic code and pretrained models** will be released soon.  
 Stay tuned — updates will be announced here.
 
 ---
 
-## Citation
+## 📑 Citation
+If you use this dataset or our paper, please cite:
 
 ```bibtex
 @InProceedings{Xing_2025_CVPR,
@@ -28,4 +29,3 @@ Stay tuned — updates will be announced here.
     year      = {2025},
     pages     = {19098-19108}
 }
-```
