@@ -1,0 +1,53 @@
+model:
+  arch: video_llama
+  model_type: pretrain_vicuna
+  freeze_vit: True
+  freeze_qformer: True
+  max_txt_len: 512
+  end_sym: "###"
+  low_resource: False
+
+  # If you want use LLaMA-2-chat,
+  # some ckpts could be download from our provided huggingface repo
+  # i.e.  https://huggingface.co/DAMO-NLP-SG/Video-LLaMA-2-13B-Finetuned
+  llama_model: "ckpt/llama-2-7b-chat-hf"  # "ckpt/vicuna-13b/" or "ckpt/vicuna-7b/" or , , or "ckpt/llama-2-13b-chat-hf"
+  imagebind_ckpt_path: "ckpt/imagebind_huge.pth"
+
+  equip_audio_branch: True  # whether equips the audio branch
+  frozen_llama_proj: False
+  frozen_video_Qformer: False
+  frozen_audio_Qformer: False
+  frozen_llama: True
+  
+  fusion_head_layers: 2
+  max_frame_pos: 32
+  fusion_header_type: "seqTransf"
+
+  enabled_lora: True
+  lora_r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+
+  dynamic_connector: True
+
+datasets:  
+  my_dataset_instruct:
+    data_type: video
+    build_info:
+      anno_dir: ""
+      videos_dir: ""
+    vis_processor:
+      train:
+        name: "alpro_video_train"
+        n_frms: 8
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+    num_video_query_token: 32
+    tokenizer_name: "ckpt/llama-2-7b-chat-hf"
+    model_type: "llama_v2" 
+
+
+run:
+  task: video_text_pretrain

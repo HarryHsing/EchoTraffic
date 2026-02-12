@@ -1,0 +1,7 @@
+datasets:
+  internvid:
+    data_type: video
+    build_info:
+      anno_dir: /research/d1/gds/zhxing/projects_llm/datasets/InternVid-10M-FLT-INFO.jsonl
+      videos_dir: /research/d1/gds/zhxing/projects_llm/datasets/vd-foundation___InternVid-10M-FLT/raw/InternVId-FLT_1/
+

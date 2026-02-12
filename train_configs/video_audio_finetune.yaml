@@ -1,0 +1,101 @@
+model:
+  arch: video_llama
+  model_type: pretrain_vicuna
+  freeze_vit: True
+  freeze_qformer: True
+
+
+  # Q-Former
+  num_query_token: 32
+
+  # If you want train models based on LLaMA-2-chat,
+  # some ckpts could be download from our provided huggingface repo
+  # i.e.  https://huggingface.co/DAMO-NLP-SG/Video-LLaMA-2-13B-Finetuned
+  llama_model: "./ckpt/llama-2-7b-chat-hf"
+  imagebind_ckpt_path: "./ckpt/imagebind_huge.pth"
+
+  # The ckpt of vision branch after stage1 pretrained, 
+  ckpt: "./ckpt/videollama_video_audio_pretrain/checkpoint_49.pth"
+
+
+  # only train vision branch
+  equip_audio_branch: True  # whether equips the audio branch
+  frozen_llama_proj: False
+  frozen_video_Qformer: False
+  frozen_audio_Qformer: False
+  frozen_llama: True
+  
+  fusion_head_layers: 2
+  max_frame_pos: 32
+  fusion_header_type: "seqTransf"
+
+  max_txt_len: 320
+
+  enabled_lora: True
+  lora_r: 64
+  lora_alpha: 128
+  lora_dropout: 0.05
+
+  dynamic_connector: True
+
+  # vicuna and llama_2_chat use different template !!!
+
+  # # for llama_2_chat:
+  # end_sym: "</s>"
+  # prompt_path: "prompts/alignment_image.txt"
+  # prompt_template: '[INST] <<SYS>>\n \n<</SYS>>\n\n{} [/INST] '
+
+  # for vicuna:
+  # end_sym: "###"
+  # prompt_path: "prompts/alignment_image.txt"
+  # prompt_template: '###Human: {} ###Assistant: '
+
+
+datasets:  
+  my_dataset_instruct:
+    data_type: video
+    build_info:
+      anno_dir: ./datasets/AV-TAU/annotations/sft_formatted_test.json
+      videos_dir: ./datasets/AV-TAU/
+    vis_processor:
+      train:
+        name: "alpro_video_train"
+        n_frms: 8
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+    num_video_query_token: 32
+    tokenizer_name: "ckpt/llama-2-7b-chat-hf"
+    model_type: "llama_v2" 
+
+run:
+  task: video_text_pretrain
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 2e-5
+  min_lr: 1e-10
+  warmup_lr: 1e-6
+
+  weight_decay: 0.0001
+  max_epoch: 1
+  # iters_per_epoch: 1
+  batch_size_train: 1
+  accum_grad_iters: 2
+  batch_size_eval: 1
+  num_workers: 16
+  warmup_steps: 0
+
+  seed: 42
+  output_dir: "output/videollama_video_audio_pretrain_sft"
+
+  amp: True
+  resume_ckpt_path: null
+
+  evaluate: False 
+  train_splits: ["train"]
+
+  device: "cuda"
+  world_size: 8
+  dist_url: "env://"
+  distributed: True

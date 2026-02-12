@@ -1,0 +1,17 @@
+datasets:  
+  my_dataset_instruct:
+    data_type: video
+    build_info:
+      anno_dir: /research/d1/gds/zhxing/videochat_instruct_11k.json
+      videos_dir: ""
+    vis_processor:
+      train:
+        name: "alpro_video_train"
+        n_frms: 8
+        image_size: 224
+    text_processor:
+      train:
+        name: "blip_caption"
+    num_video_query_token: 32
+    tokenizer_name: "ckpt/llama-2-7b-chat-hf"
+    model_type: "llama_v2" 

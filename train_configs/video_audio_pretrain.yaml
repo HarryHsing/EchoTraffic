@@ -1,0 +1,77 @@
+model:
+  arch: video_llama
+  model_type: pretrain_vicuna
+  freeze_vit: True
+  freeze_qformer: True
+  
+  # Q-Former
+  num_query_token: 32
+
+  # If you want train models based on LLaMA-2-chat,
+  # some ckpts could be download from our provided huggingface repo
+  # i.e.  https://huggingface.co/DAMO-NLP-SG/Video-LLaMA-2-13B-Pretrained
+  llama_model: "./ckpt/llama-2-7b-chat-hf" # or "ckpt/vicuna-7b/" or "ckpt/llama-2-7b-chat-hf"  or "ckpt/llama-2-13b-chat-hf"
+  imagebind_ckpt_path: "./ckpt/imagebind_huge.pth"
+  llama_proj_model: './ckpt/pretrained_minigpt4_7b.pth' # or  '/mnt/workspace/ckpt/pretrained_minigpt4_7b.pth'
+
+  # only train vision branch
+  equip_audio_branch: True  # whether equips the audio branch
+  frozen_llama_proj: False
+  frozen_video_Qformer: False
+  frozen_audio_Qformer: False
+  frozen_llama: True
+  
+  fusion_head_layers: 2
+  max_frame_pos: 32
+  fusion_header_type: "seqTransf"
+  num_video_query_token: 32
+
+datasets:
+  internvid:
+    data_type: video
+    build_info:
+      anno_dir: ./datasets/vd-foundation___InternVid-10M-FLT/InternVid-10M-FLT-INFO_with_audio.jsonl
+      videos_dir: ./datasets/vd-foundation___InternVid-10M-FLT/raw/
+
+    vis_processor:
+      train:
+        name: "alpro_video_train"
+        n_frms: 8
+        image_size: 224
+        sampling: uniform
+    text_processor:
+      train:
+        name: "blip_caption"
+    sample_ratio: 100
+
+run:
+  task: video_text_pretrain
+  # optimizer
+  lr_sched: "linear_warmup_cosine_lr"
+  init_lr: 1e-4
+  min_lr: 1e-6
+  warmup_lr: 1e-6
+
+  weight_decay: 0.01
+  max_epoch: 50
+  batch_size_train: 16
+  accum_grad_iters: 2
+  batch_size_eval: 16
+  num_workers: 8
+  warmup_steps: 100
+  iters_per_epoch: 1663
+
+  log_freq: 10
+  seed: 42
+  output_dir: "output/videollama_video_audio_pretrain"
+
+  amp: True
+  resume_ckpt_path: null
+
+  evaluate: False 
+  train_splits: ["train"]
+
+  device: "cuda"
+  world_size: 8
+  dist_url: "env://"
+  distributed: True
