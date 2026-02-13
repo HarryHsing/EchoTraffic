@@ -61,7 +61,7 @@ torchrun --nproc_per_node=4 train.py --cfg-path  ./train_configs/video_audio_fin
 ---
 
 ## Preparation (Datasets and Weights)
-
+You can download `EchoTraffic` from [Hugging Face](https://huggingface.co/harryhsing/EchoTraffic-7B).
 ### Model Weights
 ```bash
 ./ckpt/
