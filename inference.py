@@ -100,7 +100,7 @@ class VideoLLaMaInference:
                     self.args.num_frames,
                 )
             else:
-                logger.error(f"Runtime error processing video: {str(e)}")
+                logger.error(f"Runtime error during video processing (video_path={video_path}): {str(e)}")
             return None
         except Exception as e:
             logger.error(f"Error processing video: {str(e)}")
