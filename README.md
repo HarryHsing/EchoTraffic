@@ -40,8 +40,14 @@ python inference.py \
     --prompt "What unusual event takes place in the video?" \
     --model-path ./ckpt/videollama_video_audio_sft/checkpoint_0.pth \
     --cfg-path ./eval_configs/finetune_eval.yaml \
-    --gpu-id 0
+    --gpu-id 0 \
+    --num-frames 8
 ```
+
+> Why did `num_frames=32` fail but `num_frames=8` work?
+>  
+> During `upload_video`, more frames produce more visual tokens/features and significantly higher GPU memory usage.  
+> On limited VRAM, `num_frames=32` can trigger CUDA OOM, while `num_frames=8` usually fits memory.
 
 ---
 

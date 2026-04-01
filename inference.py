@@ -76,7 +76,7 @@ class VideoLLaMaInference:
             img_list = []
 
             # Upload video
-            self.chat.upload_video(video_path, chat_state, img_list, num_frames=8)
+            self.chat.upload_video(video_path, chat_state, img_list, num_frames=self.args.num_frames)
 
             # Ask question and get response
             self.chat.ask(prompt, chat_state)
@@ -91,6 +91,17 @@ class VideoLLaMaInference:
             )[0]
 
             return response
+        except RuntimeError as e:
+            if "out of memory" in str(e).lower():
+                logger.error(
+                    "CUDA out of memory during video upload/inference. "
+                    "Root cause is usually high frame count (num_frames=%s), which increases visual token and embedding memory. "
+                    "Try a smaller value such as --num-frames 8.",
+                    self.args.num_frames,
+                )
+            else:
+                logger.error(f"Runtime error processing video: {str(e)}")
+            return None
         except Exception as e:
             logger.error(f"Error processing video: {str(e)}")
             return None
@@ -114,6 +125,12 @@ def parse_args():
                        type=str, 
                        default="What unusual event takes place in the video?",
                        help="Prompt content for the model.")
+    parser.add_argument(
+        "--num-frames",
+        type=int,
+        default=8,
+        help="Number of video frames to sample for inference. Larger values use more GPU memory.",
+    )
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
     parser.add_argument("--options", default=["run.seed=42"], nargs="+", 
                        help="Override some settings in the used config.") 
