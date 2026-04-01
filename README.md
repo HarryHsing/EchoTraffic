@@ -46,8 +46,9 @@ python inference.py \
 
 > Why did `num_frames=32` fail but `num_frames=8` work?
 >  
-> During `upload_video`, more frames produce more visual tokens/features and significantly higher GPU memory usage.  
-> On limited VRAM, `num_frames=32` can trigger CUDA OOM, while `num_frames=8` usually fits memory.
+> In this checkpoint/config, the audio-video fusion path is aligned for up to 8 temporal clips.  
+> Setting `num_frames=32` can produce temporal shape mismatch errors (for example: `tensor a (8) vs tensor b (32)`), even without OOM.  
+> Use `--num-frames 8` unless you also retrain/modify temporal embedding settings.
 
 ---
 

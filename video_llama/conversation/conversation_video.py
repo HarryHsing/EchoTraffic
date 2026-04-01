@@ -234,13 +234,19 @@ class Chat:
     def upload_video(self, video_path, conv, img_list, num_frames):
 
         msg = ""
+        effective_num_frames = min(num_frames, 8)
+        if effective_num_frames != num_frames:
+            print(
+                f"Requested num_frames={num_frames}, but current audio-position embedding supports up to 8. "
+                f"Using num_frames={effective_num_frames}."
+            )
         if isinstance(video_path, str):  # is a video path
             ext = os.path.splitext(video_path)[-1].lower()
             # print(video_path)
             # image = self.vis_processor(image).unsqueeze(0).to(self.device)
             video, msg = load_video(
                 video_path=video_path,
-                n_frms=num_frames,
+                n_frms=effective_num_frames,
                 height=224,
                 width=224,
                 sampling ="uniform", return_msg = True
@@ -252,7 +258,7 @@ class Chat:
             raise NotImplementedError
         try:
             audio_flag = 1
-            audio = load_and_transform_audio_data([video_path],"cpu",  clips_per_video=8)
+            audio = load_and_transform_audio_data([video_path],"cpu",  clips_per_video=effective_num_frames)
             audio = audio.to(self.device)
         except :
             print('no audio is found')

@@ -99,6 +99,12 @@ class VideoLLaMaInference:
                     "Try a smaller value such as --num-frames 8.",
                     self.args.num_frames,
                 )
+            elif "must match the size of tensor" in str(e):
+                logger.error(
+                    "Runtime shape mismatch during audio-video fusion: current checkpoint code path supports up to 8 synchronized temporal clips. "
+                    "If num_frames is set larger (e.g., 32), audio/video temporal lengths can become incompatible. "
+                    "Use --num-frames 8 with this checkpoint/config."
+                )
             else:
                 logger.error(f"Runtime error during video processing (video_path={video_path}): {str(e)}")
             return None
