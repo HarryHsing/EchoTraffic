@@ -76,7 +76,7 @@ class VideoLLaMaInference:
             img_list = []
 
             # Upload video
-            self.chat.upload_video(video_path, chat_state, img_list, num_frames=32)
+            self.chat.upload_video(video_path, chat_state, img_list, num_frames=8)
 
             # Ask question and get response
             self.chat.ask(prompt, chat_state)
