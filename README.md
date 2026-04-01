@@ -47,7 +47,7 @@ python inference.py \
 > Why did `num_frames=32` fail but `num_frames=8` work?
 >  
 > In this checkpoint/config, the audio-video fusion path is aligned for up to 8 temporal clips.  
-> Setting `num_frames=32` can produce temporal shape mismatch errors (for example: `tensor a (8) vs tensor b (32)`), even without OOM.  
+> Setting `num_frames=32` can produce temporal shape mismatch errors (for example: `The size of tensor a (8) must match the size of tensor b (32)`), even without OOM.  
 > Use `--num-frames 8` unless you also retrain/modify temporal embedding settings.
 
 ---
