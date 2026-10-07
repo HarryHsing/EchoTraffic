@@ -55,7 +55,7 @@ datasets:
   my_dataset_instruct:
     data_type: video
     build_info:
-      anno_dir: ./datasets/AV-TAU/annotations/sft_formatted_test.json
+      anno_dir: ./datasets/AV-TAU/annotations/sft_formatted_train.json
       videos_dir: ./datasets/AV-TAU/
     vis_processor:
       train:

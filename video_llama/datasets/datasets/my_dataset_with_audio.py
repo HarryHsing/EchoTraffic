@@ -70,7 +70,7 @@ class Video_Audio_Instruct_Dataset(BaseDataset):
 
     def _get_video_path(self, sample):
         rel_video_fp = sample['video']
-        return rel_video_fp
+        return os.path.join(self.vis_root, rel_video_fp)
 
     def __getitem__(self, index):
         num_retries = 10  # skip error videos

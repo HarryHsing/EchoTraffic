@@ -156,6 +156,8 @@ def main():
     
     inference = VideoLLaMaInference(args)
     response = inference.process_video(args.video_path, args.prompt)
+    if response is None:
+        raise RuntimeError('Video inference failed; see the error above.')
     
 
     logger.info("Processing Results:")
