@@ -9,12 +9,16 @@ We release the **AV-TAU dataset** to support audio-visual traffic anomaly unders
 
 👉 Available on [AV-TAU](https://huggingface.co/datasets/harryhsing/AV-TAU)
 
+Use `annotations/sft_formatted_test.json` for evaluation.
+
 ---
 
 ## 🤖 Model: EchoTraffic
 Pre-trained and Supervised Fine‑tuning (SFT) checkpoints for **EchoTraffic** are publicly available.
 
 👉 Available on [EchoTraffic](https://huggingface.co/harryhsing/EchoTraffic-7B)
+
+For audio-video inference, use `videollama_video_audio_sft/checkpoint_0.pth` with the base weights listed below.
 
 ---
 
@@ -40,8 +44,11 @@ python inference.py \
     --prompt "What unusual event takes place in the video?" \
     --model-path ./ckpt/videollama_video_audio_sft/checkpoint_0.pth \
     --cfg-path ./eval_configs/finetune_eval.yaml \
+    --num-frames 8 \
     --gpu-id 0
 ```
+
+Batch inference: [`evaluation/infer_echo.py`](evaluation/infer_echo.py) and [`evaluation/infer_videollama2.py`](evaluation/infer_videollama2.py). Metrics: [`evaluation/evaluate.py`](evaluation/evaluate.py), with dependencies in [`evaluation/requirements.txt`](evaluation/requirements.txt) and model versions in [`evaluation/metric_models.json`](evaluation/metric_models.json). Run each script with `--help` for arguments.
 
 ---
 
@@ -104,3 +111,4 @@ If you use this dataset or our paper, please cite:
     year      = {2025},
     pages     = {19098-19108}
 }
+```

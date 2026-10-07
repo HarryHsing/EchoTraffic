@@ -1,0 +1,68 @@
+{
+  "distilbert-base-uncased": {
+    "repo": "distilbert/distilbert-base-uncased",
+    "revision": "12040accade4e8a0f71eabdb258fecc2e7e948be",
+    "files": [
+      {
+        "file": "pytorch_model.bin",
+        "url": "https://cdn.huggingface.co/distilbert-base-uncased-pytorch_model.bin",
+        "sha256": "e60d71610916da4787c5513c81bc026d415708528295502fb3e1a6fe1485ea7c",
+        "bytes": 267967963
+      },
+      {
+        "file": "config.json",
+        "url": "https://huggingface.co/distilbert/distilbert-base-uncased/resolve/12040accade4e8a0f71eabdb258fecc2e7e948be/config.json",
+        "sha256": "69c94b0222d5d1f4b0ad027ca7416cdafb98378cbbb8305d0bf47c9365c60c83",
+        "bytes": 483
+      },
+      {
+        "file": "vocab.txt",
+        "url": "https://huggingface.co/distilbert/distilbert-base-uncased/resolve/12040accade4e8a0f71eabdb258fecc2e7e948be/vocab.txt",
+        "sha256": "07eced375cec144d27c900241f3e339478dec958f92fddbc551f295c992038a3",
+        "bytes": 231508
+      },
+      {
+        "file": "tokenizer_config.json",
+        "url": "https://huggingface.co/distilbert/distilbert-base-uncased/resolve/12040accade4e8a0f71eabdb258fecc2e7e948be/tokenizer_config.json",
+        "sha256": "a025160ef0431f1a392f6f050c1310f4c5d9fb6f275932dbccba73c4d214bf10",
+        "bytes": 48
+      },
+      {
+        "file": "tokenizer.json",
+        "url": "https://huggingface.co/distilbert/distilbert-base-uncased/resolve/12040accade4e8a0f71eabdb258fecc2e7e948be/tokenizer.json",
+        "sha256": "ce64fce797c24f68df90b40a3f74f579b336a493db14bd583fd520ea0d8c9a98",
+        "bytes": 466062
+      }
+    ]
+  },
+  "roberta-large": {
+    "repo": "FacebookAI/roberta-large",
+    "revision": "722cf37b1afa9454edce342e7895e588b6ff1d59",
+    "files": [
+      {
+        "file": "config.json",
+        "sha256": "82ba49810e6441735e696033ac2512ee09da555507b2917ac3865b202d592cc3",
+        "bytes": 482,
+        "url": "https://huggingface.co/FacebookAI/roberta-large/resolve/722cf37b1afa9454edce342e7895e588b6ff1d59/config.json"
+      },
+      {
+        "file": "vocab.json",
+        "sha256": "9e7f63c2d15d666b52e21d250d2e513b87c9b713cfa6987a82ed89e5e6e50655",
+        "bytes": 898823,
+        "url": "https://huggingface.co/FacebookAI/roberta-large/resolve/722cf37b1afa9454edce342e7895e588b6ff1d59/vocab.json"
+      },
+      {
+        "file": "merges.txt",
+        "sha256": "1ce1664773c50f3e0cc8842619a93edc4624525b728b188a9e0be33b7726adc5",
+        "bytes": 456318,
+        "url": "https://huggingface.co/FacebookAI/roberta-large/resolve/722cf37b1afa9454edce342e7895e588b6ff1d59/merges.txt"
+      },
+      {
+        "file": "pytorch_model.bin",
+        "sha256": "36a10a8b694fadf9bf4f9049d14e257e88be45313ae02d882af9e60f39b8b2e8",
+        "bytes": 1425941629,
+        "url": "https://huggingface.co/FacebookAI/roberta-large/resolve/722cf37b1afa9454edce342e7895e588b6ff1d59/pytorch_model.bin"
+      }
+    ]
+  }
+}

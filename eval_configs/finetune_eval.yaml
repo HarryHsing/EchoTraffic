@@ -3,9 +3,11 @@ model:
   model_type: pretrain_vicuna
   freeze_vit: True
   freeze_qformer: True
-  max_txt_len: 512
-  end_sym: "###"
+  max_txt_len: 320
+  end_sym: "\n"
   low_resource: False
+  ckpt: "ckpt/videollama_video_audio_pretrain/checkpoint_49.pth"
+  ckpt_2: ""
 
   # If you want use LLaMA-2-chat,
   # some ckpts could be download from our provided huggingface repo
@@ -51,3 +53,4 @@ datasets:
 
 run:
   task: video_text_pretrain
+  seed: 42

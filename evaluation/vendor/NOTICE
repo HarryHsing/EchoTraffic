@@ -1,0 +1,7 @@
+moverscore_v2.py is the retained evaluation implementation used in the audit.
+Upstream project: https://github.com/AIPHES/emnlp19-moverscore
+The adjacent LICENSE is retained from that source tree.
+This copy uses 1 / (1 + transport distance), not the upstream alternative
+1 - transport distance. Keep this scoring convention when reproducing our numbers.
+The retained implementation filters subwords/punctuation internally even when
+remove_subwords=False is passed. The published calls preserve this behavior.

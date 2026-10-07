@@ -487,7 +487,6 @@ class VideoLLAMA(Blip2Base):
                 fuse_hidden = torch.cat((video_hidden, audio_hidden), dim=1)
                 fuse_hidden, _ = self.multihead_attn(fuse_hidden, fuse_hidden, fuse_hidden)
                 tokens_weight = self.tokens_weight_proj(fuse_hidden)
-                tokens_weight = F.softmax(tokens_weight, dim=1)
                 inputs_llama = torch.cat((inputs_llama_video, inputs_llama_audio), dim=1) * tokens_weight
             else:
                 inputs_llama = torch.cat((inputs_llama_video, inputs_llama_audio), dim=1)

@@ -38,23 +38,40 @@ class VideoLLaMaInference:
 
     def setup_environment(self):
         """Set up environment and random seeds"""
-        seed = (self.cfg.run_cfg.seed or 0) + get_rank()
-        random.seed(seed)
-        np.random.seed(seed)
-        torch.manual_seed(seed)
+        self.set_seed(self.args.seed)
         cudnn.benchmark = False
         cudnn.deterministic = True
         decord.bridge.set_bridge('torch')
 
+    @staticmethod
+    def set_seed(seed):
+        random.seed(seed)
+        np.random.seed(seed)
+        torch.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)
+
     def load_model(self, model_path: str):
         """Load and initialize the model"""
         try:
-            checkpoint = torch.load(model_path)
+            checkpoint = torch.load(model_path, map_location='cpu')
+            if checkpoint.get('config', {}).get('model', {}).get('equip_audio_branch') is not True:
+                raise ValueError('Use the corrected audio-video SFT checkpoint; the previous release has no SFT audio weights.')
+            state = checkpoint['model']
+            if not any(key.startswith('audio_') for key in state):
+                raise ValueError('The SFT checkpoint does not contain the audio branch.')
             model_config = self.cfg.model_cfg
             model_config.device_8bit = self.args.gpu_id
             model_cls = registry.get_model_class(model_config.arch)
-            model = model_cls.from_config(model_config).to(f'cuda:{self.args.gpu_id}')
-            model.load_state_dict(checkpoint['model'], strict=False)
+            model = model_cls.from_config(model_config)
+            result = model.load_state_dict(state, strict=False)
+            missing = sorted(name for name, p in model.named_parameters()
+                             if p.requires_grad and name not in state)
+            if missing or result.unexpected_keys:
+                raise RuntimeError(f'Incomplete SFT load: missing trainable={missing}; unexpected={result.unexpected_keys}')
+            self.loading_audit = {'sft_state_entries': len(state),
+                                  'missing_trainable': missing,
+                                  'unexpected_keys': list(result.unexpected_keys)}
+            model = model.to(f'cuda:{self.args.gpu_id}')
             model.eval()
             return model
         except Exception as e:
@@ -66,20 +83,32 @@ class VideoLLaMaInference:
         vis_processor_cfg = self.cfg.datasets_cfg.my_dataset_instruct.vis_processor.train
         return registry.get_processor_class(vis_processor_cfg.name).from_config(vis_processor_cfg)
 
-    def process_video(self, video_path: str, prompt: str) -> Optional[str]:
+    def process_video(self, video_path: str, prompt: str, seed=None) -> Optional[str]:
         """Process video and generate response"""
         try:
             if not os.path.exists(video_path):
                 raise FileNotFoundError(f"Video file not found: {video_path}")
+            if seed is not None:
+                self.set_seed(seed)
 
             chat_state = conv_llava_llama_2.copy() if self.args.model_type == 'llama2' else default_conversation.copy()
             img_list = []
 
             # Upload video
-            self.chat.upload_video(video_path, chat_state, img_list, num_frames=32)
+            audio_calls = []
+            hook = self.model.audio_Qformer.bert.register_forward_hook(
+                lambda *unused: audio_calls.append(True))
+            try:
+                self.chat.upload_video(video_path, chat_state, img_list,
+                                       num_frames=self.args.num_frames)
+            finally:
+                hook.remove()
+            if not audio_calls:
+                raise RuntimeError('Audio processing failed; refusing a silent video-only fallback.')
 
             # Ask question and get response
             self.chat.ask(prompt, chat_state)
+            self.last_prompt = chat_state.get_prompt()
             response = self.chat.answer(
                 conv=chat_state,
                 img_list=img_list,
@@ -115,6 +144,7 @@ def parse_args():
                        default="What unusual event takes place in the video?",
                        help="Prompt content for the model.")
     parser.add_argument("--seed", type=int, default=42, help="Random seed")
+    parser.add_argument("--num-frames", type=int, default=8, help="Frames used in the verified audio-video inference setup")
     parser.add_argument("--options", default=["run.seed=42"], nargs="+", 
                        help="Override some settings in the used config.") 
     
