@@ -73,18 +73,18 @@ run:
   task: video_text_pretrain
   # optimizer
   lr_sched: "linear_warmup_cosine_lr"
-  init_lr: 2e-5
-  min_lr: 1e-10
+  init_lr: 1e-5
+  min_lr: 1e-6
   warmup_lr: 1e-6
 
-  weight_decay: 0.0001
+  weight_decay: 0.05
   max_epoch: 1
   # iters_per_epoch: 1
   batch_size_train: 1
   accum_grad_iters: 2
   batch_size_eval: 1
   num_workers: 16
-  warmup_steps: 0
+  warmup_steps: 100
 
   seed: 42
   output_dir: "output/videollama_video_audio_pretrain_sft"
